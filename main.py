@@ -374,7 +374,7 @@ app = FastAPI()
 model = LiteHRNet_ONNX_Model()
 
 
-@app.post("/detect", response_model=list)
+@app.post("/predict", response_model=list)
 async def detect_objects(file: UploadFile = File(...)):
     # Read image file
     image = Image.open(io.BytesIO(await file.read()))

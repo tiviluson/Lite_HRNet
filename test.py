@@ -1,6 +1,6 @@
 import requests
 
-url = "http://127.0.0.1:8000/detect"
+url = "http://127.0.0.1:8000/predict"
 headers = {
     "accept": "application/json",
     # "Content-Type": "multipart/form-data"
