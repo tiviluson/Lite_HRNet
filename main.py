@@ -33,7 +33,7 @@ class LiteHRNet_ONNX_Model():
     def pre_process(self, PIL_img) -> tuple:  # -> Any:
         tensor_image = self.PIL_transform(PIL_img)
         input_img_resized_bchw_ndarray = transforms.functional.resize(
-            tensor_image, (384, 288)).detach().cpu().numpy()
+            tensor_image, (384, 288), antialias=False).detach().cpu().numpy()
         input_img_hwc = input_img_resized_bchw_ndarray.transpose(1, 2, 0)
         img_LoadImageFromFile = input_img_hwc[:, :, [2, 1, 0]]
         trans = np.array([[0.79999993, -0., 28.80000977],
