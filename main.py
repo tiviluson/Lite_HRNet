@@ -1,4 +1,3 @@
-import PIL
 import onnx
 import onnxruntime as ort
 import torch
@@ -6,7 +5,6 @@ import torchvision.transforms as transforms
 
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import JSONResponse
-import torch
 from PIL import Image
 import io
 import numpy as np
@@ -33,7 +31,7 @@ class LiteHRNet_ONNX_Model():
     def pre_process(self, PIL_img) -> tuple:  # -> Any:
         tensor_image = self.PIL_transform(PIL_img)
         input_img_resized_bchw_ndarray = transforms.functional.resize(
-            tensor_image, (384, 288), antialias=False).detach().cpu().numpy()
+            tensor_image.type(torch.float32), (384, 288), antialias=False).detach().cpu().numpy()
         input_img_hwc = input_img_resized_bchw_ndarray.transpose(1, 2, 0)
         img_LoadImageFromFile = input_img_hwc[:, :, [2, 1, 0]]
         trans = np.array([[0.79999993, -0., 28.80000977],
@@ -44,7 +42,7 @@ class LiteHRNet_ONNX_Model():
             'float32')).detach().permute(2, 0, 1).div_(255.0)
         img_NormalizeTensor = transforms.functional.normalize(
             img_ToTensor, mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]).unsqueeze(0)
-        return img_NormalizeTensor.cpu().numpy(), input_img_resized_bchw_ndarray
+        return img_NormalizeTensor.cpu().numpy(), input_img_hwc.astype(np.uint8)
 
     def post_process(self, heatmaps) -> np.ndarray:
         def _get_max_preds(heatmaps):
@@ -362,12 +360,12 @@ class LiteHRNet_ONNX_Model():
         return keypoints
 
     def __call__(self, PIL_img) -> tuple:
-        pre_processed_image, input_img_resized_bchw_ndarray = self.pre_process(
+        pre_processed_image, input_img_resized_hwc_ndarray = self.pre_process(
             PIL_img)
         heatmaps = self.sess.run(None,
                                  {self.net_feed_input[0]: pre_processed_image})[0]
         keypoints = self.post_process(heatmaps)
-        return keypoints, heatmaps, input_img_resized_bchw_ndarray
+        return keypoints, heatmaps, input_img_resized_hwc_ndarray
 
 
 app = FastAPI()
@@ -379,11 +377,8 @@ async def detect_objects(file: UploadFile = File(...)):
     # Read image file
     image = Image.open(io.BytesIO(await file.read()))
     keypoints, heatmaps, resized_img = model(image)
-    print(keypoints.shape, heatmaps.shape)
-    print(keypoints.tolist(), heatmaps.tolist())
 
-    # return JSONResponse(content={"keypoints": keypoints.tolist(), "resized_img": resized_img.tolist()})
-    return JSONResponse(content={"keypoints": keypoints.tolist()})
+    return JSONResponse(content={"keypoints": keypoints.tolist(), "resized_img": resized_img.tolist()})
 
 if __name__ == "__main__":
     import uvicorn
