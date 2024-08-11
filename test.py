@@ -5,7 +5,7 @@ import argparse
 
 
 def main(args):
-    url = f"{args.url}/predict"
+    url = f"{args.ip}/predict"
 
     headers = {
         "accept": "application/json",
@@ -48,7 +48,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--image", "-i", type=str,
                         default="sample_img.jpg", help="Path to image file")
-    parser.add_argument("--url", "-u", type=str, default="http://127.0.0.1:8000",
+    parser.add_argument("--ip", type=str, default="http://127.0.0.1:8000",
                         help="URL of the server, default at localhost:8000")
     parser.add_argument("--plt", "-p", action='store_true',
                         help='Plot the image with keypoints')
