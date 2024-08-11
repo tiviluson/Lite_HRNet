@@ -48,7 +48,7 @@ Check section **Tasks** for more details
 - [x] Build Dockerfile for the project
 - [x] Run and test Dockerfile for the project
 - [x] Deploy the model using Docker and Nginx on AWS EC2
-- [ ] Deploy the model using K8S
+- [ ] Deploy the model using K8S with ArgoCD
 
 ## Citation
 ```
