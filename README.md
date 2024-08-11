@@ -1,7 +1,7 @@
 # Deploy Lite_HRNet with ONNX format
 
 ## Overview
-The base model originated from ![Lite-HRNet](https://github.com/HRNet/Lite-HRNet).
+The base model originated from [Lite-HRNet](https://github.com/HRNet/Lite-HRNet).
 In this project, I converted the base model to convert it into an ONNX model for cross-platform compatibility. This model can then be deployed locally from scratch, or by using Docker image.
 
 Check section **Tasks** for more details
