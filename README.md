@@ -27,7 +27,7 @@ Check section **Tasks** for more details
     uvicorn main:app --reload
     ```
 ### Build app from Docker image
-1. Pull Image from Docker Hub
+1. Pull Image from [Docker Hub](https://hub.docker.com/repository/docker/tiviluson/litehrnet_onnx/general)
     ```
     docker pull tiviluson/litehrnet_onnx:v0.3
     ```
@@ -37,7 +37,7 @@ Check section **Tasks** for more details
     ```
 ### Test the app
 1. Run `test.py` to test the server. Use `python -m test.py --help` for more information.
-    ![Sample output](sample_output.jpg)
+    ![Sample output](assets/sample_output.jpg)
 
 ## Tasks
 - [x] Run inference with model Lite_HRNet with MMPose's API
@@ -48,7 +48,8 @@ Check section **Tasks** for more details
 - [x] Build Dockerfile for the project
 - [x] Run and test Dockerfile for the project
 - [x] Deploy the model using Docker and Nginx on AWS EC2
-- [ ] Deploy the model using K8S with ArgoCD
+- [x] Deploy the model using K8S with ArgoCD, following GitOps principle. K8S Specs can be found in [this repo](https://github.com/tiviluson/Lite_HRNet_ONNX_config)
+![Deployment with K8S and ArgoCD](assets/argocd.png)
 
 ## Citation
 ```
