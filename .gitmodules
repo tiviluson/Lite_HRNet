@@ -1,0 +1,3 @@
+[submodule "Label_Studio_ML"]
+	path = Label_Studio_ML
+	url = https://github.com/AIVN-Build-Beta/centralized-labelstudio-mlbackend
